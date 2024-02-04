@@ -12,6 +12,8 @@
     }
   },
   "Config": {
-    "prefix": ""
+    "prefix": "",
+    "botToken": "",
+    "botID": ""
   }
 }

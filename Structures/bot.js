@@ -15,10 +15,8 @@ const { loadCommands } = require("../Handlers/Commands");
 const { loadComponents } = require("../Handlers/Components");
 const { loadPREFIXCommands } = require("../Handlers/Prefix");
 const chalk = require("chalk");
+const config = requre("./config.json")
 
-//BOT TOKEN
-var Token = ""
-//BOT TOKEN
 
 class BOT extends Client {
   constructor() {
@@ -34,7 +32,6 @@ class BOT extends Client {
         User,
       ],
     });
-    this.config = require("./config.json");
     this.commands = new Collection();
     this.subCommands = new Collection();
     this.events = new Collection();
@@ -46,15 +43,14 @@ class BOT extends Client {
       modals: new Collection(),
     };
 
-    this.token = BotToken;
     this.utils = new Util(this);
     global.chalk = chalk;
   }
 
-  async init(token) {
+  async init() {
     await loadEvents(this);
     
-    await this.login(Token).then(() => {
+    await this.login(config.Config.botToken).then(() => {
       console.log(
         chalk.bold.yellowBright(
           `[this] - ${this.user.tag} has logged into Discord. `
