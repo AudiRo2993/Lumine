@@ -6,17 +6,15 @@ const client = new BOT();
 require("./Structures/connect")();
 const fetch = require("node-fetch")
 const Discord = require("discord.js")
-
+const conversationHistoryMap = new Map();
 const axios = require("axios");
+require("dotenv").config();
+
+
+
+
 client.snipesDB = new Collection()
 client.esnipesDB = new Collection()
-process.on('unhandledRejection', async (err, cause) => {
-    console.log(`[Uncaught Rejection]: ${err}`.bold.red);
-    console.log(cause);
-  });
-  require("dotenv").config();
-
-
   // ****************************
   // API KEY FOR THE AI CHAT
   // ****************************
@@ -24,16 +22,132 @@ process.on('unhandledRejection', async (err, cause) => {
   var key = ""
   // To get a key, join "discord.gg/rialabs" and then join discord.gg/azruy and make a ticket in there, and tell the staff you need an api key for Lumine Bot which was opensourced.
  
+
+// E-SNIPE
+  client.on('messageUpdate', async (oldMessage, newMessage) => {
+    var oldemojiAttachment;
+    var newemojiAttachment;
+    const oldemojiRegex = /^<a?:([a-zA-Z0-9_]+):(\d+)>$/;
+    try {
+        var oldemojiMatch = oldMessage.content.match(oldemojiRegex)
+    
+        var newemojiRegex = /^<a?:([a-zA-Z0-9_]+):(\d+)>$/;
+        var newemojiMatch = newMessage.content.match(newemojiRegex)
+    } catch(x) {
+    
+    }
                 
   
- 
-  
+    let snipes = client.esnipesDB.get(newMessage.channel.id) || []
     
-  process.on('uncaughtException', async err => {
-    console.log(`[Uncaught Exception] ${err}`.bold.red);
-    console.log(err)
+    if(snipes.length > 5) snipes = snipes.slice(1, 4)
+    
+    if(newemojiMatch) {
+        const emojiName = newemojiMatch[1];
+            const emojiId = newemojiMatch[2];
+            const emojiURL = `https://cdn.discordapp.com/emojis/${emojiId}.png`;
+          
+            const type = await axios.get(`https://cdn.discordapp.com/emojis/${emojiId}.gif`)
+            .then(image => {
+                if (image) return "gif"
+                else return "png"
+            }).catch(err => {
+                return "png"
+            })
+          
+            newemojiAttachment = `https://cdn.discordapp.com/emojis/${emojiId}.${type}?quality=lossless`
+      }
+            if (!newemojiMatch) newemojiAttachment = null
+    
+    
+          if(oldemojiMatch) {
+            const emojiName = oldemojiMatch[1];
+                const emojiId = oldemojiMatch[2];
+                const emojiURL = `https://cdn.discordapp.com/emojis/${emojiId}.png`;
+              
+                const type = await axios.get(`https://cdn.discordapp.com/emojis/${emojiId}.gif`)
+                .then(image => {
+                    if (image) return "gif"
+                    else return "png"
+                }).catch(err => {
+                    return "png"
+                })
+              
+                oldemojiAttachment = `https://cdn.discordapp.com/emojis/${emojiId}.${type}?quality=lossless`
+          }
+                if (!oldemojiMatch) oldemojiAttachment = null
+                  const { createCanvas, loadImage } = require('canvas');
+  
+  const canvas = createCanvas(400, 200); // Set your desired canvas dimensions
+  const ctx = canvas.getContext('2d');
+  
+  Promise.all([
+      loadImage(oldemojiAttachment), // Replace with the path to your left emoji image
+      loadImage(newemojiAttachment) // Replace with the path to your right emoji image
+  ]).then(async images => {
+      const leftImage = images[0];
+      const rightImage = images[1];
+  
+      ctx.drawImage(leftImage, 0, 0, 200, 200); // Draw left image on the left side
+      ctx.drawImage(rightImage, 200, 0, 200, 200); // Draw right image on the right side
+  
+      // Add text "Old" and "New" with aqua color and stroke
+      ctx.font = '30px Arial';
+      ctx.fillStyle = 'aqua';
+      ctx.strokeStyle = 'aqua';
+      ctx.lineWidth = 4;
+  
+      // Draw "Old" text with aqua color and stroke on the left image
+      ctx.strokeText('Old', 20, 40); // Position of "Old" text on the left image
+      ctx.fillText('Old', 20, 40); // Position of "Old" text on the left image
+  
+      // Draw "New" text with aqua color and stroke on the right image
+      ctx.strokeText('New', 340, 40); // Position of "New" text on the right image
+      ctx.fillText('New', 340, 40); // Position of "New" text on the right image
+  
+      var buffer = canvas.toBuffer();
+  
+      const attachment = await new Discord.AttachmentBuilder(buffer, {name: `emojiline.png`})
+
+     console.log(attachment)
+      snipes.unshift({
+          oldMsg: oldMessage,
+          newMsg: newMessage,
+      oldImage: oldMessage.attachments.first() ? oldMessage.attachments.first().proxyURL : null,
+      newImage: newMessage.attachments.first() ? newMessage.attachments.first().proxyURL : null,
+      oldTime: oldMessage.createdTimestamp,
+      newTime: Date.now(),
+      oldSticker: oldMessage.stickers.first() ? oldMessage.stickers.first() : null,
+      newSticker: newMessage.stickers.first() ? newMessage.stickers.first() : null,
+      oldEmoji: oldemojiAttachment ? oldemojiAttachment : null,
+      newEmoji: newemojiAttachment ? newemojiAttachment : null,
+      emojiLine: attachment
+      })
+      
+  
+ 
+  })
+            
+  
+  snipes.unshift({
+            oldMsg: oldMessage,
+            newMsg: newMessage,
+        oldImage: oldMessage.attachments.first() ? oldMessage.attachments.first().proxyURL : null,
+        newImage: newMessage.attachments.first() ? newMessage.attachments.first().proxyURL : null,
+        oldTime: oldMessage.createdTimestamp,
+        newTime: Date.now(),
+        oldSticker: oldMessage.stickers.first() ? oldMessage.stickers.first() : null,
+        newSticker: newMessage.stickers.first() ? newMessage.stickers.first() : null,
+        oldEmoji: oldemojiAttachment ? oldemojiAttachment : null,
+        newEmoji: newemojiAttachment ? newemojiAttachment : null,
+        emojiLine: null
+        })
+  
+  client.esnipesDB.set(newMessage.channel.id, snipes)
+  
   });
-const conversationHistoryMap = new Map();
+
+  //REWRITE REPLY
   client.on(Events.MessageReactionAdd, async (reaction, user) => {
     // When a reaction is received, check if the structure is partial
     if (reaction.partial) {
@@ -46,7 +160,10 @@ const conversationHistoryMap = new Map();
         return;
       }
     }
+
+
   if(reaction.message.author.id === "1186408780993413230") {
+
     const data = await aichat.findOne({ guildId: reaction.message.guild.id})
     if(data && data.enabled && data.channel) {
         if (data.enabled && data.channel === reaction.message.channel.id) {
@@ -129,6 +246,14 @@ const conversationHistoryMap = new Map();
 }
     
   });
-client.init();
+//ANTICRASH
+  process.on('unhandledRejection', async (err, cause) => {
+    console.log(`[Uncaught Rejection]: ${err}`.bold.red);
+    console.log(cause);
+  });
 
-//Moved to /Structures/bot.js
+  process.on('uncaughtException', async err => {
+    console.log(`[Uncaught Exception] ${err}`.bold.red);
+    console.log(err)
+  });
+client.init();

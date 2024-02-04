@@ -20,14 +20,11 @@ module.exports = {
 
 
 
-    let data = await intellisense.findOne({ guildId: message.guild.id})
+          let data = await intellisense.create({ guildId: message.guild.id}, { enabled: false})
 
-    if(!data) {
-        console.log("No data found")
-    await intellisense.create({ guildId: message.guild.id}, { enabled: false})
-return;
+          data = await intellisense.findOne({ guildId: message.guild.id})
  
-    }
+    
     console.log(data)
 await wait(3000)
     const embed = new EmbedBuilder()

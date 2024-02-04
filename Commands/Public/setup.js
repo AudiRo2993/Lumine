@@ -24,14 +24,13 @@ module.exports = {
 
     
 
-    let data = await aichat.findOne({ guildId: interaction.guild.id})
+    let data = await aichat.create({ guildId: interaction.guild.id}, { enabled: false, channel: "", personality: "kind", defaultEngine: "gpt3", accuracy: 1})
 
-    if(!data) data = await aichat.create({ guildId: interaction.guild.id}, { enabled: false, channel: "", personality: "kind", defaultEngine: "gpt3", accuracy: 1})
 
+    data = aichat.findOne({ guildId: interaction.guild.id})
  
     
    
-await wait(3000)
     const embed = new EmbedBuilder()
     .setAuthor({ name: `Lumine - your friendly companion.`, iconURL: interaction.user.displayAvatarURL(), url: "https://discord.gg/rialabs"})
     .setDescription(`<:PI_hewwo:1179890952391888928> Enable Lumine in your server and find out there's nothing to regret about it1`)
@@ -66,11 +65,6 @@ await wait(3000)
         .setDisabled(stateMENT)
         .setCustomId("ria-disable"),
 
-        new ButtonBuilder()
-        .setLabel("Settings")
-        .setEmoji("<:moderators:1148915936443760755>")
-        .setStyle(ButtonStyle.Primary)
-        .setCustomId("ria-settings"),
     )
           const mainmsg = await msg.edit({content: `Heyy, let's setup Lumine in your server!`, embeds: [embed], components: [row]})
 

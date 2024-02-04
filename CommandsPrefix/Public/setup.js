@@ -20,15 +20,11 @@ module.exports = {
 
 
 
-    let data = await aichat.findOne({ guildId: message.guild.id})
+          let data = await aichat.create({ guildId: message.guild.id}, { enabled: false, channel: "", personality: "kind", defaultEngine: "gpt3", accuracy: 1})
 
-    if(!data) {
-        console.log("No data found")
-    await aichat.create({ guildId: message.guild.id}, { enabled: false, channel: ""})
 
- 
-    }
-    console.log(data)
+          data = aichat.findOne({ guildId: message.guild.id})
+       
 await wait(3000)
     const embed = new EmbedBuilder()
     .setAuthor({ name: `Lumine - your friendly companion.`, iconURL: message.author.displayAvatarURL(), url: "https://discord.gg/rialabs"})
@@ -64,11 +60,7 @@ await wait(3000)
         .setDisabled(stateMENT)
         .setCustomId("ria-disable"),
 
-        new ButtonBuilder()
-        .setLabel("Settings")
-        .setEmoji("<:moderators:1148915936443760755>")
-        .setStyle(ButtonStyle.Primary)
-        .setCustomId("ria-settings"),
+        
     )
           const mainmsg = await msg.edit({content: `Heyy, let's setup Lumine in your server!`, embeds: [embed], components: [row]})
 

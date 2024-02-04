@@ -1,9 +1,8 @@
 const { EmbedBuilder, PermissionsBitField, ButtonBuilder, ButtonStyle, Collection, ActionRowBuilder,   } = require("discord.js");
-
+const settings = require("../../Structures/settings.json")
 const Discord = require('discord.js');
 const intellisense = require("../../Structures/models/intellisense");
 const { default: fetch } = require("node-fetch");
-const conversationHistoryMap22 = new Map();
 module.exports = {
   name: "messageCreate",
   /**
@@ -70,7 +69,7 @@ const ms = await message.reply({ content: `https://cdn.discordapp.com/attachment
 const wait = require('node:timers/promises').setTimeout;
 await wait(4000)
 
-await ms.edit({ embeds: embeds, content: `There you go! <a:wave:1186421393177456740>` });
+await ms.edit({ embeds: embeds, content: `There you go! ${settings.emojis.wave}` });
 
         }
     

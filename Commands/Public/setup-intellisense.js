@@ -25,15 +25,9 @@ module.exports = {
 
  
 
-  let data = await intellisense.findOne({ guildId: interaction.guild.id})
+  let data = await intellisense.create({ guildId: interaction.guild.id}, { enabled: false})
 
-  if(!data) {
-      console.log("No data found")
-  await intellisense.create({ guildId: interaction.guild.id}, { enabled: false})
-return;
-
-  }
-  console.log(data)
+  data = await intellisense.findOne({ guildId: interaction.guild.id})
 await wait(3000)
   const embed = new EmbedBuilder()
   .setAuthor({ name: `Lumine - your personal coding teacher.`, iconURL:interaction.user.displayAvatarURL(), url: "https://discord.gg/rialabs"})
