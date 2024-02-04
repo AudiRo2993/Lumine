@@ -15,7 +15,7 @@ const { loadCommands } = require("../Handlers/Commands");
 const { loadComponents } = require("../Handlers/Components");
 const { loadPREFIXCommands } = require("../Handlers/Prefix");
 const chalk = require("chalk");
-const config = requre("./config.json")
+const config = require("./config.json")
 
 
 class BOT extends Client {

@@ -1,6 +1,8 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require("discord.js");
 const intellisense = require("../../Structures/models/intellisense");
 const Discord = require("discord.js")
+
+const settings = require("../../Structures/settings.json")
 module.exports = {
 	name: 'setup-intellisense',
 	description: "I can help fix your codes",
@@ -16,20 +18,21 @@ module.exports = {
 	run: async (client, message, args, prefix) => {
 		const wait = require('node:timers/promises').setTimeout;
            
-          const msg = await message.reply({ content: `<a:loading2:1148911599940288522> Hmm, let me just check if you're worthy to understand coding.. <:RIA:1177706866755780731>`})
+          const msg = await message.reply({ content: `${settings.emojis.loading} Hmm, let me just check if you're worthy to understand coding.. ${settings.emojis.mainLogo}`})
 
 
 
-          let data = await intellisense.create({ guildId: message.guild.id}, { enabled: false})
+          let data = await intellisense.findOne({ guildId: message.guild.id})
 
-          data = await intellisense.findOne({ guildId: message.guild.id})
+    if(!data) data = await intellisense.create({ guildId: message.guild.id}, { enabled: false})
+
  
     
     console.log(data)
 await wait(3000)
     const embed = new EmbedBuilder()
     .setAuthor({ name: `Lumine - your personal coding teacher.`, iconURL: message.author.displayAvatarURL(), url: "https://discord.gg/rialabs"})
-    .setDescription(`<:PI_hewwo:1179890952391888928> Do you have errors with your code? Enable **RIA Intellisense**, and i will help anyone who is facing an error!`)
+    .setDescription(`${settings.emojis.wave} Do you have errors with your code? Enable **RIA Intellisense**, and i will help anyone who is facing an error!`)
     .setThumbnail(client.user.displayAvatarURL())
     .setFooter({ text: `I'm excited, you'll love it!`, iconURL: client.user.displayAvatarURL()})
 
@@ -48,24 +51,19 @@ await wait(3000)
     .addComponents(
         new ButtonBuilder()
         .setLabel("Enable")
-        .setEmoji("<:RIA:1177706866755780731>")
+        .setEmoji(settings.emojis.mainLogo)
         .setStyle(ButtonStyle.Secondary)
         .setDisabled(state)
         .setCustomId("ria-enable"),
 
         new ButtonBuilder()
         .setLabel("Disable")
-        .setEmoji("<:Arrow_Down:1149035835988127795>")
+        .setEmoji(settings.emojis.arrowDown)
         .setStyle(ButtonStyle.Primary)
         
         .setDisabled(stateMENT)
         .setCustomId("ria-disable"),
 
-        new ButtonBuilder()
-        .setLabel("Settings")
-        .setEmoji("<:moderators:1148915936443760755>")
-        .setStyle(ButtonStyle.Primary)
-        .setCustomId("ria-settings"),
     )
           const mainmsg = await msg.edit({content: `Heyy, let's setup Lumine in your server!`, embeds: [embed], components: [row]})
 
@@ -82,7 +80,7 @@ await wait(3000)
               
     await intellisense.findOneAndUpdate({ guildId: message.guild.id}, { enabled: true})
     
-    await i.message.edit({content: `<:RIA:1177706866755780731> RIA Intellisense is now active.`, embeds: [], components: []})
+    await i.message.edit({content: `${settings.emojis.mainLogo} RIA Intellisense is now active.`, embeds: [], components: []})
     
        
             }

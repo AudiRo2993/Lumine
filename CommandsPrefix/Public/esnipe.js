@@ -25,12 +25,12 @@ module.exports = {
 
        
         const snipes = client.esnipesDB.get(message.channel.id)
-        if(!snipes) return message.reply({ content: `<:Cross:1148583818991763536> Sorry but i couldn't find any edited messages.`})
+        if(!snipes) return message.reply({ content: `⭕ Sorry but i couldn't find any edited messages.`})
      
 const snipe = args[0] - 1 || 0
 const target = snipes[snipe]
 
-if(!target) return message.reply({ content: `<:Cross:1148583818991763536> Sorry. there are only ${snipes.length} messages.`})
+if(!target) return message.reply({ content: `⭕ Sorry. there are only ${snipes.length} messages.`})
 
 const { oldMsg, newMsg, oldImage, newImage, oldTime, newTime, oldSticker, newSticker, oldEmoji, newEmoji, emojiLine } = target
 
@@ -41,7 +41,7 @@ const { oldMsg, newMsg, oldImage, newImage, oldTime, newTime, oldSticker, newSti
         const embed = new EmbedBuilder()
         .setColor("LuminousVividPink")
         .setAuthor({ name: `Sniped Edited Message - ${member.displayName}`, iconURL: member.displayAvatarURL()})
-        .setDescription(`Old Message: ${oldMsg.content}\n\nNew Message: ${newMsg.content}\n\n<:alg_bughunter:1149625961000742912> Sent at **${moment(oldTime).fromNow()}** | Snipe **${snipe + 1} / ${snipes.length}**`)
+        .setDescription(`Old Message: ${oldMsg.content}\n\nNew Message: ${newMsg.content}\n\n💫 Sent at **${moment(oldTime).fromNow()}** | Snipe **${snipe + 1} / ${snipes.length}**`)
 
         if(newImage) embed.setImage(oldImage)
 

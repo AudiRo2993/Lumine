@@ -1,6 +1,8 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require("discord.js");
 const aichat = require("../../Structures/models/aichat");
 const Discord = require("discord.js")
+
+const settings = require("../../Structures/settings.json")
 module.exports = {
 	name: 'setup-aichat',
 	description: "Set me up 😊",
@@ -16,19 +18,18 @@ module.exports = {
 	run: async (client, message, args, prefix) => {
 		const wait = require('node:timers/promises').setTimeout;
            
-          const msg = await message.reply({ content: `<a:laugh:1186421728423972864> Gimme a second.. <:RIA:1177706866755780731>`})
+          const msg = await message.reply({ content: `${settings.emojis.wave} Gimme a second.. ${settings.emojis.mainLogo}`})
 
 
+          let data = await aichat.findOne({ guildId: message.guild.id})
 
-          let data = await aichat.create({ guildId: message.guild.id}, { enabled: false, channel: "", personality: "kind", defaultEngine: "gpt3", accuracy: 1})
-
-
-          data = aichat.findOne({ guildId: message.guild.id})
+          if(!data) data = await aichat.create({ guildId: message.guild.id}, { enabled: false, channel: "", personality: "kind", defaultEngine: "gpt3", accuracy: 1})
+      
        
 await wait(3000)
     const embed = new EmbedBuilder()
     .setAuthor({ name: `Lumine - your friendly companion.`, iconURL: message.author.displayAvatarURL(), url: "https://discord.gg/rialabs"})
-    .setDescription(`<:PI_hewwo:1179890952391888928> Enable Lumine in your server and find out there's nothing to regret about it1`)
+    .setDescription(`${settings.emojis.wave} Enable Lumine in your server and find out there's nothing to regret about it1`)
     .setThumbnail(client.user.displayAvatarURL())
     .setFooter({ text: `I'm excited, you'll love it!`, iconURL: client.user.displayAvatarURL()})
 
@@ -47,16 +48,15 @@ await wait(3000)
     .addComponents(
         new ButtonBuilder()
         .setLabel("Enable")
-        .setEmoji("<:RIA:1177706866755780731>")
+        .setEmoji(settings.emojis.mainLogo)
         .setStyle(ButtonStyle.Secondary)
         .setDisabled(state)
         .setCustomId("ria-enable"),
 
         new ButtonBuilder()
         .setLabel("Disable")
-        .setEmoji("<:Arrow_Down:1149035835988127795>")
+        .setEmoji(settings.emojis.arrowDown)
         .setStyle(ButtonStyle.Primary)
-        
         .setDisabled(stateMENT)
         .setCustomId("ria-disable"),
 
@@ -102,7 +102,7 @@ await wait(3000)
     
      await aichat.findOneAndUpdate({ guildId: message.guild.id}, { channel: aichatChannel, enabled: true})
     
-    await menuChannel.message.edit({content: `<:RIA:1177706866755780731> Enjoy the power of Lumine in <#${aichatChannel}>`, embeds: [], components: []})
+    await menuChannel.message.edit({content: `${settings.emojis.mainLogo} Enjoy the power of Lumine in <#${aichatChannel}>`, embeds: [], components: []})
     
        })
             }

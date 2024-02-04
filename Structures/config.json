@@ -12,8 +12,9 @@
     }
   },
   "Config": {
-    "prefix": "",
+    "prefix": ".",
     "botToken": "",
-    "botID": ""
+    "botID": "",
+    "MongodbURI": ""
   }
 }

@@ -24,7 +24,7 @@ module.exports = {
             new ButtonBuilder()
             .setURL("https://discord.gg/rialabs")
                 .setLabel('Join RIA Labs')
-                .setEmoji(`<:RIASupport:1187702126458175618>`)
+                .setEmoji(`💫`)
                 .setStyle(ButtonStyle.Link),
 
         );
@@ -35,19 +35,19 @@ module.exports = {
         const embed = new EmbedBuilder()
         .setAuthor({ name: `Lumine - Your friendly companion`, iconURL: client.user.displayAvatarURL(), url: "https://discord.gg/rialabs"})
         .setColor("#FFC0CB")
-        .setDescription(`<:PI_hewwo:1179890952391888928> Hi, i'm Lumine, it's nice to see you! Below are a list of my commands and systems, have fun using them!
+        .setDescription(`${settings.emojis.wave} Hi, i'm Lumine, it's nice to see you! Below are a list of my commands and systems, have fun using them!
         
         
-        <:RIA:1177706866755780731> Lumine is based on our most capable model RIA 5, an extension of a variety of the most popular AI Chat models, including a live web search function for up-to-date answers, a variety of Image Generation engines to enhance your creativity
-        <:RIA5:1187699966576164895> **all for free, all in lumine, all for you.**
+        ${settings.emojis.mainLogo} Lumine is based on our most capable model RIA 5, an extension of a variety of the most popular AI Chat models, including a live web search function for up-to-date answers, a variety of Image Generation engines to enhance your creativity
+        💫 **all for free, all in lumine, all for you.**
 
 
-        </setup-aichat:1187697030856966164> or \`,setup-aichat\` <:arrowww:1187700924785893396> Enable the ai chatbot, have human-like interactions, browse the web and generate stunning images within the blink of an eye! 💫
+        </setup-aichat:1187697030856966164> or \`,setup-aichat\` 💫 Enable the ai chatbot, have human-like interactions, browse the web and generate stunning images within the blink of an eye! 💫
         
-        </setup-intellisense:1187700529623732294> or \`,setup-intellisense\` <:arrowww:1187700924785893396> Explore the workaround of your codes, get help within seconds and get suggestions on how to improve your projects! 💡
+        </setup-intellisense:1187700529623732294> or \`,setup-intellisense\` 💫 Explore the workaround of your codes, get help within seconds and get suggestions on how to improve your projects! 💡
        
        
-        ### <:RIASupport:1187702126458175618> Come hangout with us and give us ideas, watch the new updates release before everyone else at [RIA Labs](https://discord.gg/rialabs) !`)
+        ### 💫 Come hangout with us and give us ideas, watch the new updates release before everyone else at [RIA Labs](https://discord.gg/rialabs) !`)
 
        await interaction.reply({ embeds: [embed], components: [row]})
     },

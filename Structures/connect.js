@@ -5,7 +5,7 @@ const colors = require('colors')
 async function connect() {
     mongoose.set('strictQuery', false)
 
-    mongoose.connect(process.env.Connect, {
+    mongoose.connect(config.Config.MongodbURI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });

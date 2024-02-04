@@ -25,12 +25,12 @@ module.exports = {
 
        
         const snipes = client.snipesDB.get(message.channel.id)
-        if(!snipes) return message.reply({ content: `<:Cross:1148583818991763536> Sorry but i couldn't find any deleted messages.`})
+        if(!snipes) return message.reply({ content: `⭕ Sorry but i couldn't find any deleted messages.`})
      
 const snipe = args[0] - 1 || 0
 const target = snipes[snipe]
 
-if(!target) return message.reply({ content: `<:Cross:1148583818991763536> Sorry. there are only ${snipes.length} messages.`})
+if(!target) return message.reply({ content: `⭕ Sorry. there are only ${snipes.length} messages.`})
 
 const { msg, image, time, sticker, emoji } = target
 
@@ -41,7 +41,7 @@ const { msg, image, time, sticker, emoji } = target
         const embed = new EmbedBuilder()
         .setColor("LuminousVividPink")
         .setAuthor({ name: `Sniped Message - ${member.displayName}`, iconURL: member.displayAvatarURL()})
-        .setDescription(`${msg.content}\n\n<:alg_bughunter:1149625961000742912> Deleted **${moment(time).fromNow()}** | Snipe **${snipe + 1} / ${snipes.length}**`)
+        .setDescription(`${msg.content}\n\n💫 Deleted **${moment(time).fromNow()}** | Snipe **${snipe + 1} / ${snipes.length}**`)
 
         if(image) embed.setImage(image)
 
