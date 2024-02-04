@@ -1,15 +1,15 @@
 {
     "emojis": {
-        "wave" : "",
-        "shocked" : "",
-        "ok" : "",
-        "sleeping" : "",
-        "angry" : "",
-        "nerd" : "",
-        "cry" : "",
-        "happy": "",
-        "eatingPopcorn": "",
-        "confused": "",
-        "weird": ""
+        "wave" : "😳",
+        "shocked" : "🫢",
+        "ok" : "👌",
+        "sleeping" : "😴",
+        "angry" : "😒",
+        "nerd" : "🤓",
+        "cry" : "🥲",
+        "happy": "😄",
+        "eatingPopcorn": "😚",
+        "confused": "😖",
+        "weird": "🫢"
     }
 }
