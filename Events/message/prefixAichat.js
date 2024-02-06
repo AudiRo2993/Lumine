@@ -1,12 +1,12 @@
 const { EmbedBuilder, PermissionsBitField, ButtonBuilder, ButtonStyle, Collection, ActionRowBuilder,   } = require("discord.js");
 var counter = 0 ;
 const Discord = require('discord.js');
+
+const config = require("../../Structures/config.json")
 const settings = require("../../Structures/settings.json")
 //RaidenAngry
 const aichat = require("../../Structures/models/aichat");
 //https://artix.is-a.dev/api/chatgpt
-const { Prodia } = require("prodia.js");
-const prodia = new Prodia("400c0815-b5b1-476d-9621-d888d1a01a72"); 
 const fetch = require("node-fetch");
 const conversationHistoryMap = new Map();
 const conversationHistoryMap2 = new Map();
@@ -23,23 +23,12 @@ module.exports = {
     if(!message.guild.available) return;
 
 
-      // ****************************
-  // API KEY FOR THE AI CHAT
-  // ****************************
-
-  var key = ""
-  // To get a key, join "discord.gg/rialabs" and then join discord.gg/azruy and make a ticket in there, and tell the staff you need an api key for Lumine Bot which was opensourced.
- 
+  
 
 
 
 
-  var errorMessages = [
-    `hey, bae, the server i'm running on is down, come back later..`,
-    `sorry bae, i'm tired now, i have to sleep too, you know? come back later..`,
-    `${settings.emojis.sleeping} hey i can't talk right now, the server is down, wait though, i'll be back soon, i miss you.`
-  ]
-  var errorIndex = Math.floor(Math.random() * errorMessages.length);
+
 
 
 
@@ -82,7 +71,7 @@ let conversationHistory = conversationHistoryMap.get(message.author.id) || `Your
 
 conversationHistory += `\nUser's message: ${message.cleanContent.replaceAll('#', '<hashtag_symbol>')}`;
 
-const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${key}&query=${encodeURIComponent(conversationHistory)}`).catch(x => {
+const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(conversationHistory)}`).catch(x => {
 conversationHistoryMap.clear(message.author.id)
 
 message.reply("I'm sorry, the API Is currently unavailable. Please try again later\n**This is not an issue on Lumine!**")

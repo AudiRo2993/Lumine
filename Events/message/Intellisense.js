@@ -1,4 +1,6 @@
 const { EmbedBuilder, PermissionsBitField, ButtonBuilder, ButtonStyle, Collection, ActionRowBuilder,   } = require("discord.js");
+
+const config = require("../../Structures/config.json")
 const settings = require("../../Structures/settings.json")
 const Discord = require('discord.js');
 const intellisense = require("../../Structures/models/intellisense");
@@ -11,13 +13,7 @@ module.exports = {
    */
   async execute(message, Razen) {
 
-     // ****************************
-  // API KEY FOR THE AI CHAT
-  // ****************************
 
-  var key = ""
-  // To get a key, join "discord.gg/rialabs" and then join discord.gg/azruy and make a ticket in there, and tell the staff you need an api key for Lumine Bot which was opensourced.
- 
 
     if(message.author.bot) return;
     if(!message.guild) return;
@@ -40,7 +36,7 @@ const keywords = ["code", "TypeError", "Unhandled Rejection Error", "help", "ans
                  
                  Here is the user's message:
                  ${message.cleanContent}`
-        const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${key}&query=${encodeURIComponent(prompt)}`)
+        const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(prompt)}`)
 
 const responseData = await response.json()
 

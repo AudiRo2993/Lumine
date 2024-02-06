@@ -1,10 +1,11 @@
 const { EmbedBuilder, PermissionsBitField, ButtonBuilder, ButtonStyle, Collection, ActionRowBuilder,   } = require("discord.js");
 var counter = 0 ;
 const Discord = require('discord.js');
+const config = require("../../Structures/config.json")
 const settings = require("../../Structures/settings.json")
 const aichat = require("../../Structures/models/aichat");
 const { Prodia } = require("prodia.js");
-const prodia = new Prodia("400c0815-b5b1-476d-9621-d888d1a01a72"); 
+const prodia = new Prodia(config.Config.ProdiaAPIKey); 
 const fetch = require("node-fetch");
 const conversationHistoryMap = new Map();
 module.exports = {
@@ -20,13 +21,7 @@ module.exports = {
     if(!message.guild.available) return;
 
 
-      // ****************************
-  // API KEY FOR THE AI CHAT
-  // ****************************
-
-  var key = ""
-  // To get a key, join "discord.gg/rialabs" and then join discord.gg/azruy and make a ticket in there, and tell the staff you need an api key for Lumine Bot which was opensourced.
- 
+  
 
 
 
@@ -206,7 +201,7 @@ await message.channel.sendTyping()
         
         conversationHistory += `\n${message.author.displayName}: ${message.cleanContent.replaceAll('#', '<hashtag_symbol>')}`;
       
-    const response = await fetch(`https://ts.azury.cc/api/v1/gpt3?apiKey=${key}&query=${encodeURIComponent(promptx)}&content=${encodeURIComponent(conversationHistory)}`).catch(x => {})
+    const response = await fetch(`https://ts.azury.cc/api/v1/gpt3?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(promptx)}&content=${encodeURIComponent(conversationHistory)}`).catch(x => {})
     if(!response) return message.reply(errorMessages[errorIndex])
    
     const responseData = await response.json().catch(x => {})
@@ -244,7 +239,7 @@ await message.channel.sendTyping()
           var name = parts[0].trim();
           var prompt = parts[1].trim();
 
-          const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${key}&query=${encodeURIComponent(prompt)}`).catch(x => {
+          const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(prompt)}`).catch(x => {
     conversationHistoryMap.clear(message.author.id)
 
     message.reply("I'm sorry, the API Is currently unavailable. Please try again later\n**This is not an issue on Lumine!**")
@@ -412,7 +407,7 @@ await wait(4000)
 
 
 const checkNSFWw = async (url) => {
-  const checkNSFWS = await fetch('https://ts.azury.cc/api/v1/antinsfw?apiKey=' + key + '&url='+url).then(res => res.json()).catch(() => {})
+  const checkNSFWS = await fetch('https://ts.azury.cc/api/v1/antinsfw?apiKey=' + config.Config.AzuryAPIKey + '&url='+url).then(res => res.json()).catch(() => {})
   
   if(checkNSFWS.is_nsfw === true) {
     console.log("true")

@@ -1,0 +1,9 @@
+Fill in the values in Structures\config.json and Structures\settings.json with the right values, then run `npm i` in your terminal, then `node .`
+
+> How to get APIs
+- Azury API Key: Join discord.gg/rialabs -> Then join discord.gg/azury -> In the azury server, make a ticket, and ask for "API Key for Lumine Bot", and patiently wait for a response.
+- Prodia API Key: Go to https://app.prodia.com/api And follow their steps
+- HuggingFace API Key: Go to https://huggingface.co/docs/api-inference/en/quicktour and follow their steps
+
+> MongoDB
+- Go to https://www.mongodb.com, make an account and create your own cluster!

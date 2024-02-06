@@ -1,14 +1,12 @@
 const { EmbedBuilder, PermissionsBitField, ButtonBuilder, ButtonStyle, Collection, ActionRowBuilder,   } = require("discord.js");
 var counter = 0 ;
 const Discord = require('discord.js');
-const settings = require("../../Structures/settings.json")
 const aichat = require("../../Structures/models/aichat");
 
-const { Prodia } = require("prodia.js");
-const prodia = new Prodia("400c0815-b5b1-476d-9621-d888d1a01a72"); 
+const config = require("../../Structures/config.json")
+const settings = require("../../Structures/settings.json")
 const fetch = require("node-fetch");
 const conversationHistoryMap = new Map();
-const conversationHistoryMap2 = new Map();
 module.exports = {
   name: "messageCreate",
   /**
@@ -22,13 +20,7 @@ module.exports = {
     if(!message.guild.available) return;
 
 
-      // ****************************
-  // API KEY FOR THE AI CHAT
-  // ****************************
-
-  var key = ""
-  // To get a key, join "discord.gg/rialabs" and then join discord.gg/azruy and make a ticket in there, and tell the staff you need an api key for Lumine Bot which was opensourced.
- 
+  
 
 
 
@@ -51,7 +43,7 @@ module.exports = {
     const response = await fetch(
       "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large",
       {
-        headers: { Authorization: "Bearer [YOUR HUGGINGFACE API TOKEN]" },
+        headers: { Authorization: `Bearer ${config.Config.HuggingFaceAPI}` },
         method: "POST",
         body:imageData
       }
@@ -122,7 +114,7 @@ module.exports = {
   
    conversationHistory += `\n${message.author.displayName} Has sent an image, the description of it is ${hasImage}. If the image is weird tell him to get that (thing) out of my face, or so on, mostly compliments tho. If the image is described as a landscape, flowers, animales, buildings etc, you can say that the (building or flower or duck or rabbit or whatever is in the image) looks so nice or cute`;
    
-  const response2 = await fetch(`https://ts.azury.cc/api/v1/gpt3?apiKey=${key}&query=${encodeURIComponent(promptx)}&content=${encodeURIComponent(conversationHistory)}`).catch(x => {})
+  const response2 = await fetch(`https://ts.azury.cc/api/v1/gpt3?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(promptx)}&content=${encodeURIComponent(conversationHistory)}`).catch(x => {})
   
   const responseData = await response2.json().catch(x => {})
   
