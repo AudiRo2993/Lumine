@@ -149,7 +149,7 @@ await message.channel.sendTyping()
         `<a:YaeNomNom:1182136299067547668> Haii! Do you want to talk to anime characters, movie actors, or cartoon characters? [Add me to your server](https://discord.com/api/oauth2/authorize?client_id=1186408780993413230&permissions=8&scope=bot+applications.commands) and enable the "character-ai" module!`];
      
      
-        let promptx = `Your name is Lumine, you run on the engine/model RIA Version 5, and this is a conversation between you and ${message.author.displayName}.
+        let conversationHistory = conversationHistoryMap.get(message.author.id) || `Your name is Lumine, you run on the engine/model RIA Version 5, and this is a conversation between you and ${message.author.displayName}.
        
        
        This is your style and personality, you must act like that (These are really important, it is what shows who you are, so be careful to be like this): 
@@ -197,16 +197,33 @@ await message.channel.sendTyping()
        
         Do not reply with messages such as "Bot: [REPLY]" or "Lumine: [REPLY]", just reply with the reply itself.`;
 
-        let conversationHistory = conversationHistoryMap.get(message.author.id) || `--Below is the chat between you and the user:--\n\n`
-        
-        conversationHistory += `\n${message.author.displayName}: ${message.cleanContent.replaceAll('#', '<hashtag_symbol>')}`;
+       const usermsg = `\nUser's message: ${message.cleanContent.replaceAll('#', '<hashtag_symbol>')}`
+
       
-    const response = await fetch(`https://ts.azury.cc/api/v1/gpt3?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(promptx)}&content=${encodeURIComponent(conversationHistory)}`).catch(x => {})
-    if(!response) return message.reply(errorMessages[errorIndex])
-   
-    const responseData = await response.json().catch(x => {})
-   
-    const answer = await responseData.result
+   const token = 'Bearer (YOUR_API_KEY_HERE)';
+const messagePayload = {
+
+    "prompt": conversationHistory,
+    "content": usermsg
+
+};
+
+const headers = {
+  'Authorization': token,
+  'Content-Type': 'application/json'
+};
+  const response = await fetch("https://ria.zentrixcode.com/api/chatgpt", {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(messagePayload)
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const responseData = await response.json();
+const answer = responseData?.content
     if(answer === "I could not respond to that message.") {
       return message.reply(errorMessages[errorIndex])
     }
