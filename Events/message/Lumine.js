@@ -200,7 +200,7 @@ await message.channel.sendTyping()
        const usermsg = `\nUser's message: ${message.cleanContent.replaceAll('#', '<hashtag_symbol>')}`
 
       
-   const token = 'Bearer (YOUR_API_KEY_HERE)';
+   const token = `Bearer ${config.Config.RIAKey}`;
 const messagePayload = {
 
     "prompt": conversationHistory,
@@ -256,21 +256,29 @@ const answer = responseData?.content
           var name = parts[0].trim();
           var prompt = parts[1].trim();
 
-          const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(prompt)}`).catch(x => {
-    conversationHistoryMap.clear(message.author.id)
+          const token = `Bearer ${config.Config.RIAKey}`
+const messagePayload = {
 
-    message.reply("I'm sorry, the API Is currently unavailable. Please try again later\n**This is not an issue on Lumine!**")
-    return;
- })
- 
- const responseData = await response.json().catch(async x => {
-   conversationHistoryMap.delete(message.author.id)
+    "prompt": prompt,
 
-   message.reply("I'm sorry, the API Is currently unavailable. Please try again later\n**This is not an issue on Lumine!**")
-   return;
-})
+};
 
- const answer2 = await responseData.result
+const headers = {
+  'Authorization': token,
+  'Content-Type': 'application/json'
+};
+  const response = await fetch(`https://api.zentrixcode.com/sync/ai/gemini`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(messagePayload)
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const responseData = await response.json();
+const answer2 = responseData?.content
 
  
      let embeds = [];
@@ -422,20 +430,46 @@ await wait(4000)
 
 
 
+          const checkNSFW = async (url) => {
+            const apiUrl = 'https://api.zentrixcode.com/nsfw';
+            const token = `Bearer ${config.Config.RIAKey}`;
+            const messagePayload = {
+            
+              
+                "imageUrl": url
+            
+            
+            };
+            
+            const headers = {
+              'Authorization': token,
+              'Content-Type': 'application/json'
+            };
+              const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(messagePayload)
+              });
+            
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+            
+              const responseData = await response.json();
+            const isNSFW = responseData.nsfw
+          
+            if(isNSFW)
+            return true;
+          
+            if(!isNSFW)
+            return false;
+           
+            
+             
+          
+          }
 
-const checkNSFWw = async (url) => {
-  const checkNSFWS = await fetch('https://ts.azury.cc/api/v1/antinsfw?apiKey=' + config.Config.AzuryAPIKey + '&url='+url).then(res => res.json()).catch(() => {})
-  
-  if(checkNSFWS.is_nsfw === true) {
-    console.log("true")
-      return true;
-  } else {
-    return false;
-    
-  }
-}
-
-const isnsfw = await checkNSFWw(job.imageUrl)
+          const nsfw = await checkNSFW(job.imageUrl)
 
 if(isnsfw === true) {
   await msg.edit({ content: `<:RZ_Error:1101228771153039453> The image generated has been detected to be NSFW.`, attachments: [], embeds: []});

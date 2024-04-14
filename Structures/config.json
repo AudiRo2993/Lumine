@@ -12,6 +12,7 @@
     }
   },
   "Config": {
+    "RIAKey": "",
     "prefix": ".",
     "botToken": "",
     "botID": "",

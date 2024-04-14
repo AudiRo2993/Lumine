@@ -54,11 +54,29 @@ let messages = [
 
     let index = Math.floor(Math.random() * messages.length);
     await interaction.editReply({ content: `${messages[index]}` });
-    const search = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent('search for '+content)}`).then(res => res.json())
+    const token = `Bearer ${config.Config.RIAKey}`;
+const messagePayload = {
 
-    if(!search || !search?.result) return interaction.editReply({ content: `:x: Sorry, i couldn't find anything for that..` });
+    "prompt": content,
 
-    const result = search.result;
+};
+
+const headers = {
+  'Authorization': token,
+  'Content-Type': 'application/json'
+};
+  const response = await fetch(`https://api.zentrixcode.com/sync/ai/gemini`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(messagePayload)
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const responseData = await response.json();
+const result = responseData?.content
 
     const embeds = [];
 

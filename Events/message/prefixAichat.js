@@ -67,25 +67,43 @@ let conversationHistory = conversationHistoryMap.get(message.author.id) || `Your
     > If the user is saying nonsense, or just sending a random letter or letters , tell him hes weird and to stop wasting your time. And if they repeat sending nonsense, tell him to shut up..
      -> If the user says random letters or numbers (example: "1 0.59 0.3" / "brdkjek" / "02d..xdw"), tell him to stop wasting your time, and if they repeat sending nonsense, tell him to shut up.
   `
- 
+  
+  
 
-conversationHistory += `\nUser's message: ${message.cleanContent.replaceAll('#', '<hashtag_symbol>')}`;
+  const usermsg = `\nUser's message: ${message.cleanContent.replaceAll('#', '<hashtag_symbol>')}`
 
-const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(conversationHistory)}`).catch(x => {
-conversationHistoryMap.clear(message.author.id)
+      
+  const token = `Bearer ${config.Config.RIAKey}`;
+const messagePayload = {
 
-message.reply("I'm sorry, the API Is currently unavailable. Please try again later\n**This is not an issue on Lumine!**")
-return;
-})
+   "prompt": conversationHistory,
+   "content": usermsg
 
-const responseData = await response.json().catch(async x => {
-conversationHistoryMap.delete(message.author.id)
+};
 
-message.reply("I'm sorry, the API Is currently unavailable. Please try again later\n**This is not an issue on Lumine!**")
-return;
-})
+const headers = {
+ 'Authorization': token,
+ 'Content-Type': 'application/json'
+};
+ const response = await fetch("https://ria.zentrixcode.com/api/chatgpt", {
+   method: 'POST',
+   headers: headers,
+   body: JSON.stringify(messagePayload)
+ });
 
-const answer = await responseData.result
+ if (!response.ok) {
+   throw new Error(`HTTP error! Status: ${response.status}`);
+ }
+
+ const responseData = await response.json();
+const answer = responseData?.content
+   
+   // Update the conversation history with the bot's response
+   conversationHistory += `\nBot: ${answer}`;
+  
+   // Save the updated conversation history for the user
+   conversationHistoryMap.set(message.author.id, conversationHistory);
+   // Reply to the user with the bot's response
 
 
 message.reply({ content: answer, allowedMentions: { parse: [] }}).catch(async e => {

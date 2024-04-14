@@ -97,12 +97,11 @@ module.exports = {
         if (!image) {
             return interaction.editReply({ content: `:x: Sorry but something broke..` });
         }
-
-        const checkNSFW = await fetch('https://the-net.loves-genshin.lol/nsfw-detector?url='+image).then(res => res.json()).catch(() => {})
-
-        if(checkNSFW?.is_nsfw) {
-            return interaction.editReply({ content: `${emojis.emojis.blush} Sorry, i can't make that... it's lewd..` });
+        if(image === 'nsfw_image_data' && interaction.user.id !== "1016400461672230912") {
+            return interaction.editReply({ content: `${emojis.emojis.blush} Sorry, i can't show you that... it's lewd..` });
         }
+
+        
 
         const imageBuffer = await fetch(image).then((res) => res.buffer());
 
@@ -132,41 +131,90 @@ module.exports = {
 
 
 async function imageGenerate(data, negative_prompt, model) {
-   
-const fs = require('fs');
+    const fs = require('fs');
 const prompt = `
 You will be given a prompt of an image description, i want you to enhance that prompt to the maximum to get theb est result possible, while also keeping it the same style. The prompt will be given below
 \n\nPROMPT:\n\n
 
 `
-const response = await fetch(`https://ts.azury.cc/api/v1/gpt3?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(prompt)}&content=${encodeURIComponent(data)}`).catch(x => {})
+    // const response = await fetch(`https://ts.azury.cc/api/v1/gpt3?apiKey=ZDUyMGM3YTgtNDIxYi00NTYzLWI5NTUtZjVhYmM1NmI5N2VjuAygYus2&query=${encodeURIComponent(prompt)}&content=${encodeURIComponent(data)}`).catch(x => {})
+   
+   
+    // const responseData = await response.json()
+   
+    // const answer = await responseData?.result
+    // if(answer === "I could not respond to that message.") {
+    //   return Error("No response from API")
+    // }
 
 
-const responseData = await response.json()
+    let job = await prodia.generateImage({
+        model: model,
+        prompt: data,
+        negativePrompt: negative_prompt,
+        seed: Math.floor(Math.random() * 1000000000),
+        upscale: true,
+        cfgScale: 9,
+        aspectRatio: "square",
+        sampler: "DDIM"
+    });
 
-const answer = await responseData?.result
-if(answer === "I could not respond to that message.") {
-  return Error("No response from API")
-}
+    while (job.status !== "succeeded") {
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        job = await prodia.getJob(job.job);
+    }
 
+    const checkNSFW = async (url) => {
+        const apiUrl = 'https://api.zentrixcode.com/nsfw';
+        const token = `Bearer ${config.Config.RIAKey}`;
+        const messagePayload = {
+        
+          
+            "imageUrl": url
+        
+        
+        };
+        
+        const headers = {
+          'Authorization': token,
+          'Content-Type': 'application/json'
+        };
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(messagePayload)
+          });
+        
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        
+          const responseData = await response.json();
+        const isNSFW = responseData.nsfw
+      
+      if(isNSFW && interaction.user.id === "1016400461672230912") {
+        return false;
+      }
+        if(isNSFW)
+        return true;
+      
+        if(!isNSFW)
+        return false;
+       
+        
+         
+      
+      }
 
-let job = await prodia.generateImage({
-    model: model,
-    prompt: answer,
-    negativePrompt: negative_prompt,
-    seed: Math.floor(Math.random() * 1000000000),
-    upscale: true,
-    cfgScale: 9,
-    aspectRatio: "square",
-    sampler: "DDIM"
-});
+      const nsfw = await checkNSFW(job.imageUrl)
 
-while (job.status !== "succeeded") {
-    await new Promise((resolve) => setTimeout(resolve, 250));
-    job = await prodia.getJob(job.job);
-}
+      if(nsfw)
+      return "nsfw_image_data";
 
-return job.imageUrl;
+      if(!nsfw)
+      return job.imageUrl;
+    //return job.imageUrl;
+
 }
 
     

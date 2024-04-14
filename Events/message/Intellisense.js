@@ -36,11 +36,31 @@ const keywords = ["code", "TypeError", "Unhandled Rejection Error", "help", "ans
                  
                  Here is the user's message:
                  ${message.cleanContent}`
-        const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=${config.Config.AzuryAPIKey}&query=${encodeURIComponent(prompt)}`)
 
-const responseData = await response.json()
-
-const answer2 = await responseData.result
+                 
+                 const token = `Bearer ${config.Config.RIAKey}`;
+                 const messagePayload = {
+                 
+                     "prompt": prompt,
+                 
+                 };
+                 
+                 const headers = {
+                   'Authorization': token,
+                   'Content-Type': 'application/json'
+                 };
+                   const response = await fetch(`https://api.zentrixcode.com/sync/ai/gemini`, {
+                     method: 'POST',
+                     headers: headers,
+                     body: JSON.stringify(messagePayload)
+                   });
+                 
+                   if (!response.ok) {
+                     throw new Error(`HTTP error! Status: ${response.status}`);
+                   }
+                 
+                   const responseData = await response.json();
+                 const answer2 = responseData?.content
 
 if(answer2.slice(0, 2000).replaceAll(`youai |`, "").replaceAll(`####`, "###").includes("NON-EXISTENT-CODING-PATTERN")) return;
 let embeds = [];
