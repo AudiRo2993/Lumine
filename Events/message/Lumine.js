@@ -259,7 +259,7 @@ const answer = responseData?.content
           const token = `Bearer ${config.Config.RIAKey}`
 const messagePayload = {
 
-    "prompt": prompt,
+    "prompt": prompt + `\n> Don't use html tags in your replies, and to use hyperlinks use this format: "[Hey](https://hey.com)"`,
 
 };
 
@@ -267,7 +267,7 @@ const headers = {
   'Authorization': token,
   'Content-Type': 'application/json'
 };
-  const response = await fetch(`https://api.zentrixcode.com/sync/ai/gemini`, {
+  const response = await fetch(`https://ria.zentrixcode.com/api/gemini`, {
     method: 'POST',
     headers: headers,
     body: JSON.stringify(messagePayload)
@@ -278,7 +278,7 @@ const headers = {
   }
 
   const responseData = await response.json();
-const answer2 = responseData?.content
+const answer2 = responseData
 
  
      let embeds = [];
