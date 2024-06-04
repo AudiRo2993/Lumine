@@ -17,7 +17,6 @@
     "botToken": "",
     "botID": "",
     "MongodbURI": "",
-    "AzuryAPIKey": "",
     "ProdiaAPIKey": "",
     "HuggingFaceAPI": ""
   }
