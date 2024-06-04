@@ -23,44 +23,49 @@ module.exports = {
 const keywords = ["code", "TypeError", "Unhandled Rejection Error", "help", "answer", "idea", "coding", "error", "errors", "terminal", "spam", "discord.js", "v14", "v13", "code help", "help me", "coder"]
 
 
-    if(aidata && aidata.enabled && keywords.some(word => message.content.toLowerCase().includes(word))) {
+    if(aidata && aidata.enabled && keywords.some(word => message.content.toLowerCase().includes(word)) && message.content.startsWith(`<@${Razen.user.id}>`)) {
 
-        const prompt = `Your name is RIA Intellisense, an extension of the ai chatbot Lumine, and you are here to help users with their coding questions.
+        // const prompt = `Your name is RIA Intellisense, an extension of the ai chatbot Lumine, and you are here to help users with their coding questions.
 
-                 > If the user's message includes a code error, a codeblock, a coding question or anything related to coding help or explanation, reply with the answer to their question.
+        //          > If the user's message includes a code error, a codeblock, a coding question or anything related to coding help or explanation, reply with the answer to their question.
                
-                 > However if the user's message does NOT include anything related to coding, just reply with "NON-EXISTENT-CODING-PATTERN"
+        //          > However if the user's message does NOT include anything related to coding, just reply with "NON-EXISTENT-CODING-PATTERN"
                 
-                 (do not change those keywords above, keep them the same.)
-                 Do not reply with messages such as "Bot: [REPLY]" or "Lumine: [REPLY]", just reply with the reply itself.
+        //          (do not change those keywords above, keep them the same.)
+        //          Do not reply with messages such as "Bot: [REPLY]" or "Lumine: [REPLY]", just reply with the reply itself.
                  
-                 Here is the user's message:
-                 ${message.cleanContent}`
+        //          Here is the user's message:
+        //          ${message.cleanContent}`
+//         const response = await fetch(`https://ts.azury.cc/api/v1/youai?apiKey=ZDUyMGM3YTgtNDIxYi00NTYzLWI5NTUtZjVhYmM1NmI5N2VjuAygYus2&query=${encodeURIComponent(prompt)}`)
 
-                 
-                 const token = `Bearer ${config.Config.RIAKey}`;
-                 const messagePayload = {
-                 
-                     "prompt": prompt,
-                 
-                 };
-                 
-                 const headers = {
-                   'Authorization': token,
-                   'Content-Type': 'application/json'
-                 };
-                   const response = await fetch(`https://api.zentrixcode.com/sync/ai/gemini`, {
-                     method: 'POST',
-                     headers: headers,
-                     body: JSON.stringify(messagePayload)
-                   });
-                 
-                   if (!response.ok) {
-                     throw new Error(`HTTP error! Status: ${response.status}`);
-                   }
-                 
-                   const responseData = await response.json();
-                 const answer2 = responseData?.content
+let prompt = `Your name is RIA Intellisense, an extension of the ai chatbot Lumine, and you are here to help users with their coding questions.`
+
+ let usermsg = `${message.cleanContent}`
+
+ const token = 'Bearer ${config.Config.RIAKey}';
+const messagePayload = {
+
+    "prompt": prompt,
+    "content": usermsg
+
+};
+
+const headers = {
+  'Authorization': token,
+  'Content-Type': 'application/json'
+};
+  const response = await fetch(`https://ria.zentrixcode.com/api/blackbox`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(messagePayload)
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const responseData = await response.json();
+const answer2 = responseData?.content
 
 if(answer2.slice(0, 2000).replaceAll(`youai |`, "").replaceAll(`####`, "###").includes("NON-EXISTENT-CODING-PATTERN")) return;
 let embeds = [];
