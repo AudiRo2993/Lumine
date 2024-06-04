@@ -42,7 +42,7 @@ let prompt = `Your name is RIA Intellisense, an extension of the ai chatbot Lumi
 
  let usermsg = `${message.cleanContent}`
 
- const token = 'Bearer ${config.Config.RIAKey}';
+ const token = `Bearer ${config.Config.RIAKey}`;
 const messagePayload = {
 
     "prompt": prompt,
