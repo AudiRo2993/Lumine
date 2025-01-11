@@ -1,35 +1,44 @@
+const {
+    SlashCommandBuilder,
+    CommandInteraction,
+    PermissionFlagsBits,
+    Client
+} = require("discord.js");
+const ms = require("ms");
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require("discord.js");
 const aichat = require("../../Structures/models/aichat");
 const Discord = require("discord.js")
-
-const settings = require("../../Structures/settings.json")
 module.exports = {
-	name: 'setup-aichat',
-	description: "Set me up 😊",
-  aliases: ["setup-aichat", "start", "install"],
-  usage: "[prefix]setup",
-  nsfwOnly: false,
-  guildOnly: false,
-  ownerOnly: false,
-	cooldown: 3000,
-	userPerms: ['ManageGuild'],
-	botPerms: [''],
-    category: "Setup",
-	run: async (client, message, args, prefix) => {
-		const wait = require('node:timers/promises').setTimeout;
+    data: new SlashCommandBuilder()
+        .setName("setup-aichat")
+        .setDescription("Setup the friendly chatbot in your guild!")
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+    /**
+     * @param {Client} client
+     * @param {CommandInteraction} interaction
+     */
+    async execute(interaction, client) {
+        const wait = require('node:timers/promises').setTimeout;
            
-          const msg = await message.reply({ content: `${settings.emojis.wave} Gimme a second.. ${settings.emojis.mainLogo}`})
+          const msg = await interaction.reply({ content: `✨ Gimme a second..`})
 
+   
 
-          let data = await aichat.findOne({ guildId: message.guild.id})
+    var data;
+    data = await aichat.findOne({ guildId: interaction.guild.id})
 
-          if(!data) data = await aichat.create({ guildId: message.guild.id}, { enabled: false, channel: "", personality: "kind", defaultEngine: "gpt3", accuracy: 1})
-      
-       
+    if(!data || data == null) {
+        await aichat.create({ guildId: interaction.guild.id}, { enabled: false, channel: "", personality: "kind", defaultEngine: "gpt3", accuracy: 1})
+        data = await aichat.findOne({ guildId: interaction.guild.id})
+    }
+
+ 
+   
+   
 await wait(3000)
     const embed = new EmbedBuilder()
-    .setAuthor({ name: `Lumine - your friendly companion.`, iconURL: message.author.displayAvatarURL(), url: "https://discord.gg/rialabs"})
-    .setDescription(`${settings.emojis.wave} Enable Lumine in your server and find out there's nothing to regret about it1`)
+    .setAuthor({ name: `Lumine - your friendly companion.`, iconURL: interaction.user.displayAvatarURL(), url: "https://rialabs.xyz/discord"})
+    .setDescription(`💫 Enable Lumine in your server and find out there's nothing to regret about it1`)
     .setThumbnail(client.user.displayAvatarURL())
     .setFooter({ text: `I'm excited, you'll love it!`, iconURL: client.user.displayAvatarURL()})
 
@@ -48,19 +57,18 @@ await wait(3000)
     .addComponents(
         new ButtonBuilder()
         .setLabel("Enable")
-        .setEmoji(settings.emojis.mainLogo)
+        .setEmoji("✨")
         .setStyle(ButtonStyle.Secondary)
         .setDisabled(state)
         .setCustomId("ria-enable"),
 
         new ButtonBuilder()
         .setLabel("Disable")
-        .setEmoji(settings.emojis.arrowDown)
+        .setEmoji("🔴")
         .setStyle(ButtonStyle.Primary)
-        .setDisabled(stateMENT)
-        .setCustomId("ria-disable"),
-
         
+        .setDisabled(stateMENT)
+        .setCustomId("ria-disable")
     )
           const mainmsg = await msg.edit({content: `Heyy, let's setup Lumine in your server!`, embeds: [embed], components: [row]})
 
@@ -70,12 +78,12 @@ await wait(3000)
           })
 
            collector.on("collect", async i => {
-            if(i.user.id !== message.author.id) return i.reply({content: `Sorry but you aren't allowed to use this menu`, ephemeral: true})
+            if(i.user.id !== interaction.user.id) return i.reply({content: `Sorry but you aren't allowed to use this menu`, ephemeral: true})
            
             if(i.customId === "ria-enable") {
                 await i.deferUpdate()
                 const embed = new EmbedBuilder()
-                .setAuthor({ name: `Select the channel.`, iconURL: client.user.displayAvatarURL(), url: "https://discord.gg/clientbot"})
+                .setAuthor({ name: `Select the channel.`, iconURL: client.user.displayAvatarURL(), url: "https://rialabs.xyz/discord"})
     
                 .setDescription(`- Select the channel where the ai-chat will be enabled from the selection menu below.`)
     
@@ -88,9 +96,9 @@ await wait(3000)
      const row1 = new ActionRowBuilder()
        .addComponents(channelSelect);
     
-     const messageChannel = await i.message.edit({ embeds: [embed], components: [row1]})
-       const collectorChannel = await messageChannel.createMessageComponentCollector({
-        filter: m => m.user.id === message.author.id,
+     const interactionChannel = await i.message.edit({ embeds: [embed], components: [row1]})
+       const collectorChannel = await interactionChannel.createMessageComponentCollector({
+        filter: m => m.user.id === interaction.user.id,
         componentType: ComponentType.ChannelSelect,
         time: 120000
        })
@@ -100,27 +108,24 @@ await wait(3000)
         await menuChannel.deferUpdate()
     var aichatChannel = menuChannel.values[0]
     
-     await aichat.findOneAndUpdate({ guildId: message.guild.id}, { channel: aichatChannel, enabled: true})
+
+    await aichat.findOneAndUpdate({ guildId: interaction.guild.id}, { channel: aichatChannel, enabled: true})
     
-    await menuChannel.message.edit({content: `${settings.emojis.mainLogo} Enjoy the power of Lumine in <#${aichatChannel}>`, embeds: [], components: []})
+    await menuChannel.message.edit({content: `✨ Enjoy the power of Lumine in <#${aichatChannel}>`, embeds: [], components: []})
     
        })
             }
 
             if(i.customId === "ria-disable") {
-                  await aichat.findOneAndUpdate({ guildId: message.guild.id}, { channel: "", enabled: false})
+                await aichat.findOneAndUpdate({ guildId: interaction.guild.id}, { channel: "", enabled: false})
     
                 await i.message.edit({content: "I'm sorry you had to let me go, i'll try to be better soon..", components: [], embeds: []})
             }
+
+          
         
          
         })
     
-		
-	}
+    },
 };
-
-
-
-
-

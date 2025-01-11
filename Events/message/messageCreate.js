@@ -12,7 +12,7 @@ module.exports = {
    */
   async execute(message, client) {
     if (!message.guild || message.guild.available === false || !message.channel || !message.author) return;
-	var prefix = ","
+	var prefix = config.Config.prefix || ";"
 	
  
     if(message.author.bot) return;

@@ -1,3 +1,23 @@
+const fs = require('fs');
+const loadReminders = () => {
+  try {
+    const data = fs.readFileSync('./reminders.json', 'utf-8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Error reading reminders file:', err);
+    return [];
+  }
+};
+
+// Save reminders back to the file
+const saveReminders = (reminders) => {
+  try {
+    fs.writeFileSync('./reminders.json', JSON.stringify(reminders, null, 2));
+  } catch (err) {
+    console.error('Error saving reminders file:', err);
+  }
+};
+
 module.exports = {
   name: "ready",
   once: true,
@@ -17,6 +37,32 @@ module.exports = {
       Want a changing status? Just change line 56 to `status: obj[key].status` and insert your own status into each object below.
       Different statuses include "online", "idle", "dnd", and "invisible"
     */
+      const checkReminders = () => {
+        const currentTime = Date.now();
+        const reminders = loadReminders(); // Load the current reminders from the file
+    
+        reminders.forEach((reminder, index) => {
+          if (reminder.time <= currentTime) {
+            // Fetch the user and channel
+            const user = client.users.cache.get(reminder.userId);
+            const channel = client.channels.cache.get(reminder.channelId);
+    
+            // Send the reminder message
+            if (user && channel) {
+              channel.send(`✨ wake up ${user}, you told me to remind you, right?\nhere's ur msg: ${reminder.message}`);
+            }
+    
+            // Remove the reminder after sending it
+            reminders.splice(index, 1);
+          }
+        });
+    
+        // Save updated reminders back to the file
+        saveReminders(reminders);
+      };
+    
+      // Check every minute (60000ms)
+      setInterval(checkReminders, 20000);
     let acts = [
       {
         name: "your messages 🙉",

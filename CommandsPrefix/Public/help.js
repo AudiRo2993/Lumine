@@ -35,7 +35,7 @@ module.exports = {
 		const row = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
-            .setURL("https://discord.gg/rialabs")
+            .setURL("https://rialabs.xyz/discord")
                 .setLabel('Join RIA Labs')
                 .setEmoji("💫")
                 .setStyle(ButtonStyle.Link),
@@ -50,7 +50,7 @@ module.exports = {
         const linkrow = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
-            .setURL("https://discord.gg/rialabs")
+            .setURL("https://rialabs.xyz/discord")
                 .setLabel('Join RIA Labs')
                 .setEmoji(`💫`)
                 .setStyle(ButtonStyle.Link),
@@ -65,16 +65,16 @@ module.exports = {
         const row2 = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
-            .setURL("https://discord.gg/rialabs")
+            .setURL("https://rialabs.xyz/discord")
                 .setLabel('Join RIA Labs')
-                .setEmoji(`<:RIASupport:1187702126458175618>`)
+                .setEmoji(`✨`)
                 .setStyle(ButtonStyle.Link),
         );
        
         
 
         const embed = new EmbedBuilder()
-        .setAuthor({ name: `Lumine - Your friendly companion`, iconURL: client.user.displayAvatarURL(), url: "https://discord.gg/rialabs"})
+        .setAuthor({ name: `Lumine - Your friendly companion`, iconURL: client.user.displayAvatarURL(), url: "https://rialabs.xyz/discord"})
         .setColor("#FFC0CB")
         .setDescription(`${settings.emojis.wave} Hi, i'm Lumine, it's nice to see you! Below are a list of my commands and systems, have fun using them!
         
@@ -88,7 +88,7 @@ module.exports = {
         </setup-intellisense:1187700529623732294> or \`,setup-intellisense\` 💫 Explore the workaround of your codes, get help within seconds and get suggestions on how to improve your projects! 💡
        
        
-        ### 💫 Come hangout with us and give us ideas, watch the new updates release before everyone else at [RIA Labs](https://discord.gg/rialabs) !`)
+        ### 💫 Come hangout with us and give us ideas, watch the new updates release before everyone else at [RIA Labs](https://rialabs.xyz/discord) !`)
 
        const msg = await message.reply({ embeds: [embed], components: [row]})
 
@@ -104,7 +104,7 @@ if(i.customId === "other-commands"){
     await i.deferUpdate()
 
 const embed2 = new EmbedBuilder()
-.setAuthor({ name: `Lumine - Your friendly companion`, iconURL: client.user.displayAvatarURL(), url: "https://discord.gg/rialabs"})
+.setAuthor({ name: `Lumine - Your friendly companion`, iconURL: client.user.displayAvatarURL(), url: "https://rialabs.xyz/discord"})
 .setColor("#FFC0CB")
 .setDescription(`${settings.emojis.wave} Hi, i'm Lumine, it's nice to see you! Below are a list of my commands and systems, have fun using them!\n\n`
 )
@@ -120,7 +120,7 @@ if(i.customId === "back"){
     await i.deferUpdate()
 
     const embed = new EmbedBuilder()
-    .setAuthor({ name: `Lumine - Your friendly companion`, iconURL: client.user.displayAvatarURL(), url: "https://discord.gg/rialabs"})
+    .setAuthor({ name: `Lumine - Your friendly companion`, iconURL: client.user.displayAvatarURL(), url: "https://rialabs.xyz/discord"})
     .setColor("#FFC0CB")
     .setDescription(`${settings.emojis.wave} Hi, i'm Lumine, it's nice to see you! Below are a list of my commands and systems, have fun using them!
         
@@ -134,7 +134,7 @@ if(i.customId === "back"){
         </setup-intellisense:1187700529623732294> or \`,setup-intellisense\` 💫 Explore the workaround of your codes, get help within seconds and get suggestions on how to improve your projects! 💡
        
        
-        ### 💫 Come hangout with us and give us ideas, watch the new updates release before everyone else at [RIA Labs](https://discord.gg/rialabs) !`)
+        ### 💫 Come hangout with us and give us ideas, watch the new updates release before everyone else at [RIA Labs](https://rialabs.xyz/discord) !`)
 
 await i.message.edit({embeds: [embed], components: [row2]})
 
