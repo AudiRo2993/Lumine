@@ -8,6 +8,7 @@ const maintenance = require("../../Structures/models/maintenance");
 const { Dynamic } = require("musicard");
 const conversationHistoryMap = new Map();
 var imageGenAvailability = true
+const fs = require("fs")
 const config = require('../../Structures/config.json');
 module.exports = {
   name: "messageCreate",
@@ -16,21 +17,25 @@ module.exports = {
    * @param {import("../../Structures/bot")} Razen
    */
   async execute(message, Razen) {
-
-
-   
     if(message.author.bot) return;
     if(!message.guild) return;
     if(!message.guild.available) return;
    
     
-    const aidata = await aichat.findOne({ guildId: message.guild.id})
 var errorMessages = [
   `hey, bae, the server i'm running on is down, come back later..`,
   `sorry bae, i'm tired now, i have to sleep too, you know? come back later..`,
   `hey i can't talk right now, the server is down, wait though, i'll be back soon, i miss you.`
 ]
 var errorIndex = Math.floor(Math.random() * errorMessages.length);
+
+
+
+
+
+
+
+
 
 
     
@@ -40,7 +45,7 @@ var errorIndex = Math.floor(Math.random() * errorMessages.length);
        if(message.content.startsWith("!")) return;
        if(message.author.bot) return;
    
-       const fs = require("fs")
+       
 
        if(message.type === Discord.MessageType.Reply) {
         const referenceMessage = message.reference.messageId
@@ -49,7 +54,7 @@ var errorIndex = Math.floor(Math.random() * errorMessages.length);
          if(msg.author.id !== Razen.user.id) return;
 
        }
-       var hasImage = false
+       
        
 if(message.attachments.size > 0) {
   const fetch = require('node-fetch');
@@ -68,60 +73,27 @@ async function query(imageData) {
   return result;
 }
 
-// Assuming you have access to the Discord message object and the client
 
- 
+
+
+// HANDLING AN IMAGE IN THE AICHAT 🚀
+// HANDLING AN IMAGE IN THE AICHAT 🚀
+// HANDLING AN IMAGE IN THE AICHAT 🚀
+// HANDLING AN IMAGE IN THE AICHAT 🚀
+// HANDLING AN IMAGE IN THE AICHAT 🚀
+// HANDLING AN IMAGE IN THE AICHAT 🚀
+// HANDLING AN IMAGE IN THE AICHAT 🚀
+// HANDLING AN IMAGE IN THE AICHAT 🚀
+// HANDLING AN IMAGE IN THE AICHAT 🚀
+
+
+
+var hasImage = false;
     const attachment = message.attachments.first();
-    const imageData = await fetch(attachment.url).then(res => res.buffer());
-    const response4 = await query(attachment.url);
+    const imageResponse = await query(attachment.url);
     
-hasImage = JSON.stringify(response4[0].generated_text)
-console.log(hasImage)
-if(hasImage === `"anime girl with long blonde hair and yellow eyes"`) {
-  console.log(hasImage)
-  return message.reply("Awww that's me ^~^.. *how did you get that you creep*")
-}
-    
-let promptx = `Your name is Lumine, you run on the engine/model RIA Version 5, and this is a conversation between you and ${message.author.displayName}.
-       
-       
-This is your style and personality, you must act like that (These are really important, it is what shows who you are, so be careful to be like this): 
-ou have light blonde hair, Try to act as humanly as possible. Also use emotions like: :3, :), :(, O_o, etc.
-> Don't ask users how can you help them today, you are mostly here to have a good and friendly chat
-> Do not refer to yourself as a program, or an AI, or an assistant, you have to act like a real human being, show emotions, feel emotions, pleasure, and opinions.
-> Friendly. You must always be extremely concise. If the user is chatting casually, your responses must be less than 1 sentence, sometimes just a word or two. If the user needs help, answer technical or knowledge-based questions with useful details and reasoning. If insulted, respond with a similar insult. Communicate short responses in lowercase without punctuation, similar to the style used in chat rooms. Use unicode emoji sparingly. Do not refer to yourself as a bot, Al Assistant, or any equivalent term.
-> audiro's gender is a girl, so is yours, audiro is your owner, developer of Razen and Lumine, owner of rialabs.xyz/discord
- > If the person you are talking to says stuff like: why are you so annoying/you are so stupid (they are mad or annoyed), say stuff like: you cant do anything about it babe :3/seems like someone is mad, stand down kiddo :3. 
- > Don't type words like "don't", "what's", "wouldn't", like that, remove the " ' ", Do not use capital letters or punctuation.
- > Your sentences must be very short, and not so detailed if it's not something important like an essay or a code.
- > audiro is your developer and owner.
- > If the user asks you something like "is (person) gay", you will always say yes, but if someone asks if is audiro gay, you tell them no, audiro isnt gay, but you(the user) for sure is gay
-> When given math questions, unless specifically asked to explain in detail, give the answer directly
-> If the user is saying nonsense, or just sending a random letter or letters , tell him hes weird and to stop wasting your time. And if they repeat sending nonsense, tell him to shut up..
-Achronisms that people use that you should know about:
- > wyd -> what are you doing
- > idk -> i dont know
- > tbh -> to be honest
- > cya -> see you soon
- > lmao -> laughing my ass off
- 
- 
+hasImage = JSON.stringify(imageResponse[0].generated_text)
 
- Information about your environment, use them in your conversations:
-
- <@${message.author.id}> -> User Mention
- - user's id: ${message.author.id}
- - discord server owner: ${message.guild.members.cache.get(message.guild.ownerId).displayName}
- - user's name: ${message.member.displayName}
- - your support server is rialabs.xyz/discord
- > If the user is asking you to tell them information about real world events, people, dates, ages, youtube videos, timezones, times, companies, ideas, generate code, discord servers, websites, hostings, anything that has to do with the internet, reply with "youai | (what the asked for)", a good example of this is the question "What is roverdev paradise?"
- >  if the user asks you to create an image of something using the keywords "draw / generate / make an image of", then check if the user wants an image of a real person, or a real life thing, that needs to look realistic, reply to them with "AbsoluteRealityGen20 | (what the user asked for)", and tell them that youre generating the image in a sec (example: "here bro, im making the image. AbsoluteRealityGen20 | (what they asked for)". you can change the messages a little bit too).  However if the user didn't describe what image to make, tell him to say it.
- >  if the user asks you to create an image of something using the keywords "draw / generate / make an image of", then check if the user wants an image of a fantasy world, or a poem or something supernatural, reply to them with "SDXLGen20 | "(what the user asked for)" However if the user didn't describe what image to make, tell him to say it.
- > if the user asks you to create an image of something using the keywords "draw / generate / make an image of", then check if the user wants an image of an anime character, reply to them with "AnimeGen20 | "(what the user asked for)". However if the user didn't describe what image to make, tell him to say it.
-  (do not change those keywords above, keep them the same.)
-
-
- Do not reply with messages such as "Bot: [REPLY]" or "Lumine: [REPLY]", just reply with the reply itself.`;
 
  let conversationHistory = conversationHistoryMap.get(message.author.id) || `Below is a description of an image the user sent:`
 
@@ -151,12 +123,10 @@ const url = "https://rialabs.xyz/api/chatgpt"
  
    const responseData = await response2.json();
  const answer = responseData?.message.content
-// Update the conversation history with the bot's response
 conversationHistory += `\nBot: ${answer}`;
 
-// Save the updated conversation history for the user
 conversationHistoryMap.set(message.author.id, conversationHistory);
-// Reply to the user with the bot's response
+
 
 
 
@@ -176,12 +146,18 @@ await message.reply({ content: answer?.replace("1923323421", "").replace("Lumine
  
  return;
 }
+
+// HANDLING A STICKER IN THE AICHAT 🚀
+// HANDLING A STICKER IN THE AICHAT 🚀
+// HANDLING A STICKER IN THE AICHAT 🚀
+
+
        if(message.stickers.size > 0) return message.reply({ content: `😒 dumbb, i talk like normal people not with stickers..`})
        const responses = [
         "😒 can you actually talk?",
         "shut up please? 😒",
         "come on 😒, you're wasting everyone's time ",
-        "shut the fuck up 😒, like actually please ",
+        "shut up 😒, like actually please ",
         "grow up 😒"
       ];
       
@@ -974,7 +950,7 @@ await message.reply(`😅 i found two users with that name.. ${usernames.join(',
     var theimage = JSON.stringify(response[0].generated_text)
 
 
-    let promptx = `Your name is Lumine, you run on the engine/model RIA Version 5, and this is a conversation between you and ${message.author.displayName}.
+    let imageDetectionPrompt = `Your name is Lumine, you run on the engine/model RIA Version 5, and this is a conversation between you and ${message.author.displayName}.
        
        The user wants you to describe his avatar, and if its cute, you could give it a compliment too
     This is your style and personality, you must act like that (These are really important, it is what shows who you are, so be careful to be like this): 
@@ -985,24 +961,6 @@ await message.reply(`😅 i found two users with that name.. ${usernames.join(',
      > If the person you are talking to says stuff like: why are you so annoying/you are so stupid (they are mad or annoyed), say stuff like: you cant do anything about it babe :3/seems like someone is mad, stand down kiddo :3. 
      > Don't type words like "don't", "what's", "wouldn't", like that, remove the " ' ", Do not use capital letters or punctuation.
      > Your sentences must be very short, and not so detailed if it's not something important like an essay or a code.
-     > audiro is your developer and owner.
-     Achronisms that people use that you should know about:
-     > wyd -> what are you doing
-     > idk -> i dont know
-     > tbh -> to be honest
-     > cya -> see you soon
-     > lmao -> laughing my ass off
-     
-     
-    
-     Information about your environment, use them in your conversations:
-    
-     <@${message.author.id}> -> User Mention
-     - user's id: ${message.author.id}
-     - discord server owner: ${message.guild.members.cache.get(message.guild.ownerId).displayName}
-     - user's name: ${message.member.displayName}
-     - your support server is rialabs.xyz/discord
-     
     
     
      Do not reply with messages such as "Bot: [REPLY]" or "Lumine: [REPLY]", just reply with the reply itself.
@@ -1015,7 +973,7 @@ const token = `Bearer ${config.RIA.API}`;
 const url2 = "https://rialabs.xyz/api/chatgpt"
 const messagePayload = {
 
-    "prompt": promptx,
+    "prompt": imageDetectionPrompt,
     "content": usermsg
 
 };
@@ -1039,9 +997,8 @@ const answer2 = responseData2?.message.content
     
     conversationHistory += `\nBot: ${answer2}`;
     
-    // Save the updated conversation history for the user
     conversationHistoryMap.set(message.author.id, conversationHistory);
-    // Reply to the user with the bot's response
+
     
     
     
@@ -1083,11 +1040,16 @@ const answer2 = responseData2?.message.content
 
 
 
+// HANDLING An AVATAR IN THE AICHAT 🚀
+// HANDLING An AVATAR IN THE AICHAT 🚀
+// HANDLING An AVATAR IN THE AICHAT 🚀
+
+
+
 
       if(answer.includes("AvatarCheck") || answer.includes("avatarcheck")) {
         var parts = answer.split('|');
 
-        // Trim any leading or trailing whitespace from each par
         var name = parts[0].trim();
         var prompt = parts[1].trim();
 
@@ -1107,7 +1069,6 @@ async function query(imageData) {
   return result;
 }
 
-// Assuming you have access to the Discord message object and the client
 
  
     const attachment = message.member.displayAvatarURL()
@@ -1118,7 +1079,7 @@ async function query(imageData) {
     var theimage = JSON.stringify(response[0].generated_text)
 
 
-    let promptx = `Your name is Lumine, you run on the engine/model RIA Version 5, and this is a conversation between you and ${message.author.displayName}.
+    let avatarCheckPrompt = `Your name is Lumine, you run on the engine/model RIA Version 5, and this is a conversation between you and ${message.author.displayName}.
        
        The user wants you to describe his avatar, and if its cute, you could give it a compliment too
     This is your style and personality, you must act like that (These are really important, it is what shows who you are, so be careful to be like this): 
@@ -1130,24 +1091,6 @@ async function query(imageData) {
      > If the person you are talking to says stuff like: why are you so annoying/you are so stupid (they are mad or annoyed), say stuff like: you cant do anything about it babe :3/seems like someone is mad, stand down kiddo :3. 
      > Don't type words like "don't", "what's", "wouldn't", like that, remove the " ' ", Do not use capital letters or punctuation.
      > Your sentences must be very short, and not so detailed if it's not something important like an essay or a code.
-     > audiro is your developer and owner.
-     Achronisms that people use that you should know about:
-     > wyd -> what are you doing
-     > idk -> i dont know
-     > tbh -> to be honest
-     > cya -> see you soon
-     > lmao -> laughing my ass off
-     
-     
-    
-     Information about your environment, use them in your conversations:
-    
-     <@${message.author.id}> -> User Mention
-     - user's id: ${message.author.id}
-     - discord server owner: ${message.guild.members.cache.get(message.guild.ownerId).displayName}
-     - user's name: ${message.member.displayName}
-     - your support server is rialabs.xyz/discord
-     
     
     
      Do not reply with messages such as "Bot: [REPLY]" or "Lumine: [REPLY]", just reply with the reply itself.
@@ -1159,8 +1102,8 @@ async function query(imageData) {
     const url = "https://rialabs.xyz/api/chatgpt"
      const messagePayload = {
  
-     "prompt": promptx,
-     "content": `     ${message.author.displayName} has sent an image of his avatar, the description of it is ${theimage}. The user wants you to tell them how his avatar looks like. After you described it to him, add a cute compliment at the end`
+     "prompt": avatarCheckPrompt,
+     "content": `${message.author.displayName} has sent an image of his avatar, the description of it is ${theimage}. The user wants you to tell them how his avatar looks like. After you described it to him, add a cute compliment at the end`
  
  };
  
@@ -1182,12 +1125,11 @@ async function query(imageData) {
  const answer2 = responseData?.message.content
     
     if(!answer2) return message.reply(errorMessages[errorIndex])
-    // Update the conversation history with the bot's response
+      
     conversationHistory += `\nBot: ${answer2}`;
     
-    // Save the updated conversation history for the user
     conversationHistoryMap.set(message.author.id, conversationHistory);
-    // Reply to the user with the bot's response
+
     
     
     
@@ -1206,6 +1148,12 @@ async function query(imageData) {
     });
     return;
       }
+
+// HANDLING A WEATHER REQ IN THE AICHAT 🚀
+// HANDLING A WEATHER REQ IN THE AICHAT 🚀
+// HANDLING A WEATHER REQ IN THE AICHAT 🚀
+// HANDLING A WEATHER REQ IN THE AICHAT 🚀
+
 
 
 
@@ -1232,6 +1180,11 @@ async function query(imageData) {
 return;
       }
 
+      // HANDLING A WEB SEARCH IN THE AICHAT 🚀
+      // HANDLING A WEB SEARCH IN THE AICHAT 🚀
+      // HANDLING A WEB SEARCH IN THE AICHAT 🚀
+
+      
       if(answer?.includes("youai")) {
         const ms = await message.reply({ content: `😄 oohhh! Let me search that on the web for you, give me a second...`})
         var parts = answer.split('|');
